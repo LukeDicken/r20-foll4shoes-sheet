@@ -1,0 +1,142 @@
+<main>
+    <section class="header f-center">
+        <h1>Roll20 - Roll For Shoes Character Sheet</h1>
+    </section>
+  
+  
+     <section class="basics">
+         <h2>Basics</h2>
+        <label>Char name: <input name="attr_character_name" type="text"></label>
+        <label>XP: <button type="action" name="act_spendXP">Spend XP</button></button><input name="attr_xp" type="number" value=0 min=0><button type="action" name="act_addXP">Add XP</button></button></label>
+    </section>
+  
+    <section class="power f-col">
+        <h2>Skills</h2>
+        <fieldset class="repeating_skill">
+            <input name="attr_skill" type="text" >
+            <select name="attr_skill_level">
+                <option value=1>1</option>
+                <option value=2>2</option>
+            </select>
+            <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
+            <button type="action" name="act_rollskill">Use</button>
+        </fieldset>
+    </section>
+    
+    <rolltemplate class="sheet-rolltemplate-skill">
+        <div class="sheet-template-container">
+            <h3>{{skill}} ({{skill_level}})</h3>
+            <h2>Total: {{roll1}}</h2>
+            <br />
+            <div>{{computed::roll1}}</div>
+        </div>
+    </rolltemplate>
+    
+    <rolltemplate class="sheet-rolltemplate-addxp">
+        <div class="sheet-template-container">
+            {{name}} gained XP
+        </div>
+    </rolltemplate>
+    
+    <rolltemplate class="sheet-rolltemplate-spendxp">
+        <div class="sheet-template-container">
+            {{name}} spent XP
+        </div>
+    </rolltemplate>
+    
+    <script type="text/worker">
+        on("clicked:addXP", function() {
+            // write your sheetworker to do things here
+            getAttrs(["xp"], function(values) {
+                let newXP = (parseInt(values.xp)||0 ) + 1;
+                setAttrs({                            
+                    "xp": newXP
+                });
+                startRoll("&{template:addxp} {{name=@{character_name}}} {{roll1=[[1d20]]}}", (results) => {
+                    const total = results.results.roll1.result
+                    const computed = total % 4;
+        
+                    finishRoll(
+                        results.rollId,
+                        {
+                            roll1: computed
+                        }
+                    );
+                });
+            });
+            
+        });
+        
+        on("clicked:spendXP", function() {
+            getAttrs(["xp"], function(values) {
+                let newXP = (parseInt(values.xp)||0 ) - 1;
+                if (newXP < 0)
+                {
+                    newXP = 0;
+                }
+                setAttrs({                            
+                    "xp": newXP
+                });
+            });
+            startRoll("&{template:spendxp} {{name=@{character_name}}} {{roll1=[[1d20]]}}", (results) => {
+                const total = results.results.roll1.result
+                console.log(results.results.roll1)
+                const computed = total % 4;
+                    
+               
+    
+                finishRoll(
+                    results.rollId,
+                    {
+                        roll1: computed
+                    }
+                );
+            });
+            
+        });
+        
+        on("clicked:repeating_skill:rollskill", function(eventInfo) {
+            console.log("Starting roll skill");
+            const rowid = eventInfo.sourceAttribute.split('_')[2];
+            getAttrs(['repeating_skill_'+rowid+'_skill','repeating_skill_'+rowid+'_skill_level'], function(values) {
+                console.log(values)
+                var skillName = values['repeating_skill_'+rowid+'_skill'];
+                console.log(skillName);
+                var skillLevel = (parseInt(values['repeating_skill_'+rowid+'_skill_level'])||1);
+                console.log(skillLevel)
+                startRoll('&{template:skill} {{name=@{character_name}}} {{skill='+skillName+'}} {{skill_level=' + skillLevel + '}} {{roll1=[['+skillLevel+'d6]]}}', (results) => {
+                    
+                    const dice = results.results.roll1.dice;
+                    var counter = 0;
+                    console.log('counter is 0');
+                    for (i = 0; i < dice.length; i++)
+                    {
+                        console.log('looking at dice:' + i +' whose value is:'+ dice[i]);
+                        if (dice[i] != 6)
+                        {
+                            console.log('counter increased');
+                            counter++;
+                        }
+                    }
+                    var computed = "";
+                    if (counter === 0)
+                    {
+                        computed = "Gain a skill!";
+                    }
+                    else
+                    {
+                        computed = "Spend " + counter + " XP to gain a skill!";
+                    }
+                    
+                    finishRoll(
+                        results.rollId,
+                        {
+                            roll1: computed
+                        }
+                    );
+                });
+            });
+        });
+    </script>
+    
+</main>
