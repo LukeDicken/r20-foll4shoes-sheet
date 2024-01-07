@@ -9,44 +9,64 @@
         <label>Char name: <input name="attr_character_name" type="text"></label>
         <label>XP: <button type="action" name="act_spendXP">Spend XP</button></button><input name="attr_xp" type="number" value=0 min=0><button type="action" name="act_addXP">Add XP</button></button></label>
     </section>
-  
-    <section class="power f-col">
-        <h2>Skills</h2>
-        <fieldset class="repeating_skill">
-            <input name="attr_skill" type="text" >
-            <select name="attr_skill_level">
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-                <option value=4>4</option>
-                <option value=5>5</option>
-                <option value=6>6</option>
-                <option value=7>7</option>
-                <option value=8>8</option>
-                <option value=9>9</option>
-            </select>
-            <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
-            <button type="action" name="act_rollskill">Use</button>
+    
+    <div class="sheet-2colrow">
+        <div class="col">
+            <section class="skill f-col">
+                <h2>Skills</h2>
+                <fieldset class="repeating_skill">
+                    <input name="attr_skill" type="text" >
+                    <select name="attr_skill_level">
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                    </select>
+                    <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
+                    <button type="action" name="act_rollskill">Use</button>
+                </fieldset>
+            </section>
+        </div>
+        <div class="col">
+            <section class="weakness f-col">
+                <h2>Weaknesses</h2>
+                <fieldset class="repeating_weakness">
+                    <input name="attr_weakness" type="text" >
+                    <select name="attr_weakness_level">
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                    </select>
+                    <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
+                    <button type="action" name="act_rollweakness">Use</button>
+                </fieldset>
+            </section>
+        </div>
+    </div>
+    <section class="status f-col">
+        <h2>Statuses</h2>
+        <fieldset class="repeating_status">
+            <input name="attr_status" type="text" />
+            <input name="attr_status_modifier" type="number" />
         </fieldset>
     </section>
     
-    <section class="power f-col">
-        <h2>Weaknesses</h2>
-        <fieldset class="repeating_weakness">
-            <input name="attr_weakness" type="text" >
-            <select name="attr_weakness_level">
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-                <option value=4>4</option>
-                <option value=5>5</option>
-                <option value=6>6</option>
-                <option value=7>7</option>
-                <option value=8>8</option>
-                <option value=9>9</option>
-            </select>
-            <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
-            <button type="action" name="act_rollweakness">Use</button>
+    <section class="damage f-col">
+        <h2>Damage</h2>
+        <fieldset class="repeating_damage">
+            <input name="attr_damage" type="text" >
+            <input name="attr_damage_modifier" type="number">
         </fieldset>
     </section>
     
