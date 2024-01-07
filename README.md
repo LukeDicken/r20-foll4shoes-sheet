@@ -1,4 +1,4 @@
-This is a [Roll20|roll20/net] Custom Sheet for the [Roll for Shoes|https://rollforshoes.com/] TTRPG rules-light system.
+This is a [Roll20](roll20/net) Custom Sheet for the [Roll for Shoes](https://rollforshoes.com/) TTRPG rules-light system.
 
 It is fairly minimal and tracks the following:
 
