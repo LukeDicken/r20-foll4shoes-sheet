@@ -17,9 +17,36 @@
             <select name="attr_skill_level">
                 <option value=1>1</option>
                 <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>9</option>
             </select>
             <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
             <button type="action" name="act_rollskill">Use</button>
+        </fieldset>
+    </section>
+    
+    <section class="power f-col">
+        <h2>Weaknesses</h2>
+        <fieldset class="repeating_weakness">
+            <input name="attr_weakness" type="text" >
+            <select name="attr_weakness_level">
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>9</option>
+            </select>
+            <!-- <button type="roll" name="roll_skill" value="**@{character_name}** uses *@{skill}*, and rolls [[@{skill_level}d6]]"></button> -->
+            <button type="action" name="act_rollweakness">Use</button>
         </fieldset>
     </section>
     
@@ -29,6 +56,13 @@
             <h2>Total: {{roll1}}</h2>
             <br />
             <div>{{computed::roll1}}</div>
+        </div>
+    </rolltemplate>
+    
+    <rolltemplate class="sheet-rolltemplate-weakness">
+        <div class="sheet-template-container">
+            <h3>{{skill}} ({{skill_level}})</h3>
+            <h2>Total: {{roll1}}</h2>
         </div>
     </rolltemplate>
     
@@ -137,6 +171,21 @@
                 });
             });
         });
+        
+        on("clicked:repeating_weakness:rollweakness", function(eventInfo) {
+            console.log("Starting roll weakness");
+            const rowid = eventInfo.sourceAttribute.split('_')[2];
+            getAttrs(['repeating_weakness_'+rowid+'_weakness','repeating_weakness_'+rowid+'_weakness_level'], function(values) {
+                console.log(values)
+                var skillName = values['repeating_weakness_'+rowid+'_weakness'];
+                console.log(skillName);
+                var skillLevel = (parseInt(values['repeating_weakness_'+rowid+'_weakness_level'])||1);
+                console.log(skillLevel)
+                startRoll('&{template:weakness} {{name=@{character_name}}} {{skill='+skillName+'}} {{skill_level=' + skillLevel + '}} {{roll1=[['+skillLevel+'d6kl1]]}}', (results) => {
+                });
+            });
+        });
+        
     </script>
     
 </main>
