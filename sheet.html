@@ -123,28 +123,40 @@
         
         on("clicked:spendXP", function() {
             getAttrs(["xp"], function(values) {
+                //console.log(values)
                 let newXP = (parseInt(values.xp)||0 ) - 1;
+                //console.log("newXP value: " + newXP)
+                var wasZero = false;
                 if (newXP < 0)
                 {
+                    //console.log("Resetting to zero");
+                    wasZero = true;
                     newXP = 0;
+                    
                 }
                 setAttrs({                            
                     "xp": newXP
                 });
-            });
-            startRoll("&{template:spendxp} {{name=@{character_name}}} {{roll1=[[1d20]]}}", (results) => {
-                const total = results.results.roll1.result
-                console.log(results.results.roll1)
-                const computed = total % 4;
-                    
-               
-    
-                finishRoll(
-                    results.rollId,
-                    {
-                        roll1: computed
-                    }
-                );
+
+                //console.log("wasZero = " + wasZero);
+                
+                if(wasZero == false)
+                {
+                    startRoll("&{template:spendxp} {{name=@{character_name}}} {{roll1=[[1d20]]}}", (results) => {
+                        const total = results.results.roll1.result
+                        console.log(results.results.roll1)
+                        const computed = total % 4;
+                            
+                       
+            
+                        finishRoll(
+                            results.rollId,
+                            {
+                                roll1: computed
+                            }
+                        );
+                    });
+                }
             });
             
         });
